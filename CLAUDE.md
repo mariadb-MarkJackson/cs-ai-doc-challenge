@@ -21,7 +21,7 @@ Three stages, each saving output to disk so it can be inspected and re-run on it
 
 1. `src/extract/`: pull articles from the MariaDB Confluence into `data/raw/` (built, see below).
 2. `src/transform/`: convert each raw article into Zendesk article JSON in `data/out/` (not started).
-3. `src/load/`: read `data/out/` and POST to Zendesk as drafts (not started).
+3. `src/load/`: read `data/out/` and POST to Zendesk as drafts (shell built, untested until the Zendesk token arrives; `load one <number> [--dry-run]`, `load all`; reads `data/out/<number>/article.json` with `title` and `body`, records `posted.json` to skip re-posts; no attachment upload yet).
 
 The tool is specific to this challenge, not a generic migration tool.
 
@@ -41,7 +41,7 @@ The tool is specific to this challenge, not a generic migration tool.
 Token-based so anyone can run the tool; no dependence on Claude or MCP access at runtime. Each user puts their own tokens in a local, gitignored `.env`. `.env.example` lists the variable names only. The tool must fail fast listing missing variables and must never log or print tokens.
 
 ## Status and open decisions
-- Extract is built and working against the MariaDB Confluence. Transform and load are not started. Nothing is committed beyond the folder skeleton.
+- Extract is built and working against the MariaDB Confluence. Load is a shell (untested against Zendesk). Transform is not started.
 - Language: Python (requests; pytest planned). The tool is run through `./doc-loader.sh`, which creates `.venv` and installs `requirements.txt` on first use.
 - Source: the MariaDB Confluence (mariadbcorp.atlassian.net) via REST API token. The cloned article repo is no longer being considered.
 - Whether Claude's API assists with sorting content into the four sections, or this is rule-based only. If used, a validator must confirm no source text was changed.
